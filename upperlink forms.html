@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upperlink — Student Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0d1b2a;
+    --navy-mid: #1a2e45;
+    --surface: #f5f6f8;
+    --white: #ffffff;
+    --text: #1a1f2e;
+    --muted: #6b7280;
+    --border: #e2e5ea;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+
+    --c-personal: #2563eb;
+    --c-personal-bg: #eff4ff;
+    --c-personal-light: #dbeafe;
+
+    --c-medical: #059669;
+    --c-medical-bg: #ecfdf5;
+    --c-medical-light: #d1fae5;
+
+    --c-guidance: #7c3aed;
+    --c-guidance-bg: #f5f3ff;
+    --c-guidance-light: #ede9fe;
+
+    --c-emergency: #dc2626;
+    --c-emergency-bg: #fff5f5;
+    --c-emergency-light: #fee2e2;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 62px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #60a5fa;
+  }
+
+  .header-meta {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 1.4rem;
+    height: 54px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .nav-btn .step-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: #e5e7eb;
+    color: var(--muted);
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .nav-btn:hover { color: var(--text); background: var(--surface); }
+
+  /* Active states per tab */
+  .nav-btn.active[data-form="personal"]   { color: var(--c-personal);  border-color: var(--c-personal);  background: var(--c-personal-bg); }
+  .nav-btn.active[data-form="medical"]    { color: var(--c-medical);   border-color: var(--c-medical);   background: var(--c-medical-bg); }
+  .nav-btn.active[data-form="guidance"]   { color: var(--c-guidance);  border-color: var(--c-guidance);  background: var(--c-guidance-bg); }
+  .nav-btn.active[data-form="emergency"]  { color: var(--c-emergency); border-color: var(--c-emergency); background: var(--c-emergency-bg); }
+
+  .nav-btn.active[data-form="personal"]  .step-dot { background: var(--c-personal);  color: #fff; }
+  .nav-btn.active[data-form="medical"]   .step-dot { background: var(--c-medical);   color: #fff; }
+  .nav-btn.active[data-form="guidance"]  .step-dot { background: var(--c-guidance);  color: #fff; }
+  .nav-btn.active[data-form="emergency"] .step-dot { background: var(--c-emergency); color: #fff; }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 760px;
+    margin: 2.5rem auto;
+    padding: 0 1.25rem 4rem;
+  }
+
+  /* ── FORM SECTIONS ── */
+  .form-section { display: none; }
+  .form-section.active { display: block; animation: fadeIn 0.25s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .form-header {
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .form-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.3rem;
+  }
+
+  [data-section="personal"]  .form-icon { background: var(--c-personal-light);  color: var(--c-personal);  }
+  [data-section="medical"]   .form-icon { background: var(--c-medical-light);   color: var(--c-medical);   }
+  [data-section="guidance"]  .form-icon { background: var(--c-guidance-light);  color: var(--c-guidance);  }
+  [data-section="emergency"] .form-icon { background: var(--c-emergency-light); color: var(--c-emergency); }
+
+  .form-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .form-subtitle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 3px;
+    font-weight: 300;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+
+  /* ── ACCENT BAR ── */
+  .card-accent-bar {
+    height: 3px;
+    border-radius: 14px 14px 0 0;
+    margin: -2rem -2rem 1.75rem;
+  }
+
+  [data-section="personal"]  .card-accent-bar { background: var(--c-personal);  }
+  [data-section="medical"]   .card-accent-bar { background: var(--c-medical);   }
+  [data-section="guidance"]  .card-accent-bar { background: var(--c-guidance);  }
+  [data-section="emergency"] .card-accent-bar { background: var(--c-emergency); }
+
+  /* ── FIELD GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
+  .span-2 { grid-column: span 2; }
+  .span-3 { grid-column: span 3; }
+
+  @media (max-width: 580px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .span-2, .span-3 { grid-column: span 1; }
+  }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  .field label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .field label .req { color: #ef4444; margin-left: 2px; }
+
+  .field input,
+  .field select,
+  .field textarea {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.85rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .field textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+  .field select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2.2rem; }
+
+  [data-section="personal"]  .field input:focus,
+  [data-section="personal"]  .field select:focus,
+  [data-section="personal"]  .field textarea:focus  { border-color: var(--c-personal);  box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+
+  [data-section="medical"]   .field input:focus,
+  [data-section="medical"]   .field select:focus,
+  [data-section="medical"]   .field textarea:focus   { border-color: var(--c-medical);   box-shadow: 0 0 0 3px rgba(5,150,105,0.12); }
+
+  [data-section="guidance"]  .field input:focus,
+  [data-section="guidance"]  .field select:focus,
+  [data-section="guidance"]  .field textarea:focus   { border-color: var(--c-guidance);  box-shadow: 0 0 0 3px rgba(124,58,237,0.12); }
+
+  [data-section="emergency"] .field input:focus,
+  [data-section="emergency"] .field select:focus,
+  [data-section="emergency"] .field textarea:focus   { border-color: var(--c-emergency); box-shadow: 0 0 0 3px rgba(220,38,38,0.12); }
+
+  /* validation states */
+  .field input:not(:placeholder-shown):invalid,
+  .field select:invalid,
+  .was-validated .field input:invalid,
+  .was-validated .field select:invalid,
+  .was-validated .field textarea:invalid {
+    border-color: #ef4444;
+  }
+
+  .field .hint {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .field .err-msg {
+    font-size: 0.75rem;
+    color: #ef4444;
+    display: none;
+    margin-top: 2px;
+  }
+
+  .was-validated .field input:invalid ~ .err-msg,
+  .was-validated .field select:invalid ~ .err-msg,
+  .was-validated .field textarea:invalid ~ .err-msg { display: block; }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding: 1.2rem 0 0.6rem;
+    border-top: 1px solid var(--border);
+    margin-top: 1.4rem;
+  }
+
+  /* ── CHECKBOX GROUP ── */
+  .check-group { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+
+  .check-item input[type="checkbox"] { display: none; }
+
+  [data-section="medical"] .check-item:has(input:checked)  { background: var(--c-medical-light);  border-color: var(--c-medical);  color: var(--c-medical);  }
+  [data-section="guidance"] .check-item:has(input:checked) { background: var(--c-guidance-light); border-color: var(--c-guidance); color: var(--c-guidance); }
+
+  /* ── RADIO GROUP ── */
+  .radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+
+  .radio-item input[type="radio"] { accent-color: var(--c-guidance); }
+
+  [data-section="guidance"] .radio-item:has(input:checked)  { background: var(--c-guidance-light); border-color: var(--c-guidance); color: var(--c-guidance); }
+  [data-section="emergency"] .radio-item:has(input:checked) { background: var(--c-emergency-light); border-color: var(--c-emergency); color: var(--c-emergency); }
+
+  /* ── ACTIONS ── */
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+  }
+
+  .btn-outline:hover { border-color: #9ca3af; color: var(--text); }
+
+  .btn-primary-personal  { background: var(--c-personal);  color: #fff; }
+  .btn-primary-medical   { background: var(--c-medical);   color: #fff; }
+  .btn-primary-guidance  { background: var(--c-guidance);  color: #fff; }
+  .btn-primary-emergency { background: var(--c-emergency); color: #fff; }
+
+  .btn-primary-personal:hover,
+  .btn-primary-medical:hover,
+  .btn-primary-guidance:hover,
+  .btn-primary-emergency:hover  { opacity: 0.88; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-strip {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+
+  .progress-strip span {
+    height: 4px;
+    flex: 1;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+
+  .progress-strip span.done-personal  { background: var(--c-personal);  }
+  .progress-strip span.done-medical   { background: var(--c-medical);   }
+  .progress-strip span.done-guidance  { background: var(--c-guidance);  }
+  .progress-strip span.done-emergency { background: var(--c-emergency); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: #1a1f2e;
+    color: #fff;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    transform: translateY(10px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    max-width: 320px;
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast .toast-icon { font-size: 1rem; }
+
+  /* ── SUMMARY BOX ── */
+  .success-banner {
+    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .success-banner.show { display: block; }
+  .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .success-banner h2 { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .success-banner p { color: var(--muted); font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span></span> Upperlink</div>
+  <div class="header-meta">Student Registration Portal</div>
+</header>
+
+<nav id="navbar">
+  <button class="nav-btn active" data-form="personal" onclick="switchTab('personal')">
+    <span class="step-dot">1</span> Personal Details
+  </button>
+  <button class="nav-btn" data-form="medical" onclick="switchTab('medical')">
+    <span class="step-dot">2</span> Medical Info
+  </button>
+  <button class="nav-btn" data-form="guidance" onclick="switchTab('guidance')">
+    <span class="step-dot">3</span> Guidance & Counselling
+  </button>
+  <button class="nav-btn" data-form="emergency" onclick="switchTab('emergency')">
+    <span class="step-dot">4</span> Emergency Contact
+  </button>
+</nav>
+
+<main>
+
+  <!-- Progress -->
+  <div class="progress-strip" id="progress">
+    <span id="prog-personal"></span>
+    <span id="prog-medical"></span>
+    <span id="prog-guidance"></span>
+    <span id="prog-emergency"></span>
+  </div>
+
+  <!-- ══ 1. PERSONAL DETAILS ══ -->
+  <div class="form-section active" id="section-personal" data-section="personal">
+    <div class="form-header">
+      <div class="form-icon">👤</div>
+      <div>
+        <div class="form-title">Personal Details</div>
+        <div class="form-subtitle">Basic identification and contact information</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent-bar"></div>
+      <form id="form-personal" novalidate>
+        <div class="grid-2">
+          <div class="field">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" name="firstName" placeholder="e.g. Chidinma" required minlength="2" autocomplete="given-name">
+            <span class="err-msg">Please enter a valid first name.</span>
+          </div>
+          <div class="field">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" name="lastName" placeholder="e.g. Okonkwo" required minlength="2" autocomplete="family-name">
+            <span class="err-msg">Please enter a valid last name.</span>
+          </div>
+          <div class="field">
+            <label>Middle Name</label>
+            <input type="text" name="middleName" placeholder="Optional" autocomplete="additional-name">
+          </div>
+          <div class="field">
+            <label>Date of Birth <span class="req">*</span></label>
+            <input type="date" name="dob" required max="2015-12-31" min="1950-01-01">
+            <span class="err-msg">Please enter a valid date of birth.</span>
+          </div>
+          <div class="field">
+            <label>Gender <span class="req">*</span></label>
+            <select name="gender" required>
+              <option value="" disabled selected>Select gender</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Prefer not to say</option>
+            </select>
+            <span class="err-msg">Please select a gender.</span>
+          </div>
+          <div class="field">
+            <label>Nationality <span class="req">*</span></label>
+            <input type="text" name="nationality" placeholder="e.g. Nigerian" required autocomplete="country-name">
+            <span class="err-msg">Please enter your nationality.</span>
+          </div>
+          <div class="field">
+            <label>State of Origin <span class="req">*</span></label>
+            <select name="state" required>
+              <option value="" disabled selected>Select state</option>
+              <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option>
+              <option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option>
+              <option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option>
+              <option>Ekiti</option><option>Enugu</option><option>FCT — Abuja</option><option>Gombe</option>
+              <option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option>
+              <option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+              <option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option>
+              <option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option>
+              <option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+              <option>Zamfara</option>
+            </select>
+            <span class="err-msg">Please select a state.</span>
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" name="phone" placeholder="e.g. 08012345678" required pattern="[0-9]{11}" autocomplete="tel">
+            <span class="hint">11-digit Nigerian number</span>
+            <span class="err-msg">Enter a valid 11-digit phone number.</span>
+          </div>
+          <div class="field span-2">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="e.g. student@example.com" required autocomplete="email">
+            <span class="err-msg">Enter a valid email address.</span>
+          </div>
+          <div class="field span-2">
+            <label>Residential Address <span class="req">*</span></label>
+            <textarea name="address" placeholder="House number, street name, city, state..." required minlength="10"></textarea>
+            <span class="err-msg">Please enter your full address.</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary-personal" onclick="saveAndNext('personal', 'medical')">Save &amp; Continue →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ 2. MEDICAL INFORMATION ══ -->
+  <div class="form-section" id="section-medical" data-section="medical">
+    <div class="form-header">
+      <div class="form-icon">🩺</div>
+      <div>
+        <div class="form-title">Medical Information</div>
+        <div class="form-subtitle">Health details kept strictly confidential</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent-bar"></div>
+      <form id="form-medical" novalidate>
+        <div class="grid-3">
+          <div class="field">
+            <label>Blood Group <span class="req">*</span></label>
+            <select name="bloodGroup" required>
+              <option value="" disabled selected>Select</option>
+              <option>A+</option><option>A−</option>
+              <option>B+</option><option>B−</option>
+              <option>AB+</option><option>AB−</option>
+              <option>O+</option><option>O−</option>
+            </select>
+            <span class="err-msg">Please select blood group.</span>
+          </div>
+          <div class="field">
+            <label>Genotype <span class="req">*</span></label>
+            <select name="genotype" required>
+              <option value="" disabled selected>Select</option>
+              <option>AA</option><option>AS</option><option>SS</option>
+              <option>AC</option><option>SC</option><option>CC</option>
+            </select>
+            <span class="err-msg">Please select genotype.</span>
+          </div>
+          <div class="field">
+            <label>Rhesus Factor</label>
+            <select name="rhesus">
+              <option value="" disabled selected>Select</option>
+              <option>Positive (+)</option>
+              <option>Negative (−)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Height (cm)</label>
+            <input type="number" name="height" placeholder="e.g. 165" min="50" max="250" step="0.1">
+            <span class="err-msg">Enter a value between 50–250 cm.</span>
+          </div>
+          <div class="field">
+            <label>Weight (kg)</label>
+            <input type="number" name="weight" placeholder="e.g. 58" min="10" max="300" step="0.1">
+            <span class="err-msg">Enter a value between 10–300 kg.</span>
+          </div>
+          <div class="field">
+            <label>Vision Status</label>
+            <select name="vision">
+              <option value="" disabled selected>Select</option>
+              <option>Normal</option>
+              <option>Short-sighted</option>
+              <option>Long-sighted</option>
+              <option>Uses corrective lens</option>
+              <option>Colour blind</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="section-divider">Disabilities &amp; Conditions</p>
+
+        <div class="field">
+          <label>Known Disabilities (select all that apply)</label>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" name="disability" value="visual"> Visual Impairment</label>
+            <label class="check-item"><input type="checkbox" name="disability" value="hearing"> Hearing Impairment</label>
+            <label class="check-item"><input type="checkbox" name="disability" value="mobility"> Mobility Limitation</label>
+            <label class="check-item"><input type="checkbox" name="disability" value="learning"> Learning Disability</label>
+            <label class="check-item"><input type="checkbox" name="disability" value="speech"> Speech Impairment</label>
+            <label class="check-item"><input type="checkbox" name="disability" value="none"> None</label>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem;" class="grid-2">
+          <div class="field span-2">
+            <label>Known Allergies</label>
+            <textarea name="allergies" placeholder="List any known food, drug, or environmental allergies..."></textarea>
+          </div>
+          <div class="field span-2">
+            <label>Medical History / Chronic Conditions</label>
+            <textarea name="medHistory" placeholder="Describe any existing medical conditions, surgeries, or long-term medications..."></textarea>
+          </div>
+          <div class="field">
+            <label>Doctor / Physician Name</label>
+            <input type="text" name="doctorName" placeholder="Full name">
+          </div>
+          <div class="field">
+            <label>Doctor's Phone</label>
+            <input type="tel" name="doctorPhone" placeholder="e.g. 08098765432" pattern="[0-9]{11}">
+            <span class="err-msg">Enter a valid 11-digit number.</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="switchTab('personal')">← Back</button>
+          <button type="button" class="btn btn-primary-medical" onclick="saveAndNext('medical', 'guidance')">Save &amp; Continue →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ 3. GUIDANCE & COUNSELLING ══ -->
+  <div class="form-section" id="section-guidance" data-section="guidance">
+    <div class="form-header">
+      <div class="form-icon">🧭</div>
+      <div>
+        <div class="form-title">Guidance &amp; Counselling</div>
+        <div class="form-subtitle">Academic and behavioural support information</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent-bar"></div>
+      <form id="form-guidance" novalidate>
+        <div class="grid-2">
+          <div class="field">
+            <label>Assigned Counsellor</label>
+            <input type="text" name="counsellorName" placeholder="Counsellor's full name">
+          </div>
+          <div class="field">
+            <label>Appointment Date</label>
+            <input type="date" name="appointmentDate">
+          </div>
+          <div class="field">
+            <label>Session Type <span class="req">*</span></label>
+            <select name="sessionType" required>
+              <option value="" disabled selected>Select session type</option>
+              <option>Academic Support</option>
+              <option>Career Guidance</option>
+              <option>Behavioural Counselling</option>
+              <option>Mental Health Support</option>
+              <option>Social Skills Development</option>
+              <option>Substance Abuse Prevention</option>
+            </select>
+            <span class="err-msg">Please select a session type.</span>
+          </div>
+          <div class="field">
+            <label>Preferred Session Day</label>
+            <select name="preferredDay">
+              <option value="" disabled selected>Select day</option>
+              <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+              <option>Thursday</option><option>Friday</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="section-divider">Background Information</p>
+
+        <div class="grid-2">
+          <div class="field span-2">
+            <label>Has the student received counselling before? <span class="req">*</span></label>
+            <div class="radio-group" style="margin-top: 6px;">
+              <label class="radio-item"><input type="radio" name="prevCounselling" value="yes" required> Yes</label>
+              <label class="radio-item"><input type="radio" name="prevCounselling" value="no"> No</label>
+              <label class="radio-item"><input type="radio" name="prevCounselling" value="unsure"> Not Sure</label>
+            </div>
+            <span class="err-msg">Please select an option.</span>
+          </div>
+          <div class="field span-2">
+            <label>Areas of Concern</label>
+            <div class="check-group">
+              <label class="check-item"><input type="checkbox" name="concern" value="academic"> Academic Performance</label>
+              <label class="check-item"><input type="checkbox" name="concern" value="social"> Social Relations</label>
+              <label class="check-item"><input type="checkbox" name="concern" value="emotional"> Emotional Regulation</label>
+              <label class="check-item"><input type="checkbox" name="concern" value="family"> Family Situation</label>
+              <label class="check-item"><input type="checkbox" name="concern" value="substance"> Substance Concerns</label>
+              <label class="check-item"><input type="checkbox" name="concern" value="career"> Career Direction</label>
+            </div>
+          </div>
+          <div class="field span-2">
+            <label>Behavioural Notes</label>
+            <textarea name="behaviouralNotes" placeholder="Describe any observed behavioural patterns, incidents, or concerns relevant to counselling..."></textarea>
+          </div>
+          <div class="field span-2">
+            <label>Student's Goals / Expectations</label>
+            <textarea name="goals" placeholder="What does the student hope to achieve through counselling?"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="switchTab('medical')">← Back</button>
+          <button type="button" class="btn btn-primary-guidance" onclick="saveAndNext('guidance', 'emergency')">Save &amp; Continue →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══ 4. EMERGENCY CONTACT ══ -->
+  <div class="form-section" id="section-emergency" data-section="emergency">
+    <div class="form-header">
+      <div class="form-icon">🚨</div>
+      <div>
+        <div class="form-title">Emergency Contact</div>
+        <div class="form-subtitle">Who to reach in case of an emergency</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent-bar"></div>
+      <form id="form-emergency" novalidate>
+        <div class="grid-2">
+          <div class="field">
+            <label>Contact Full Name <span class="req">*</span></label>
+            <input type="text" name="ecName" placeholder="e.g. Mr. Emmanuel Okafor" required minlength="3" autocomplete="name">
+            <span class="err-msg">Please enter a valid name.</span>
+          </div>
+          <div class="field">
+            <label>Relationship to Student <span class="req">*</span></label>
+            <select name="ecRelationship" required>
+              <option value="" disabled selected>Select relationship</option>
+              <option>Father</option><option>Mother</option><option>Guardian</option>
+              <option>Sibling</option><option>Uncle</option><option>Aunt</option>
+              <option>Grandparent</option><option>Spouse</option><option>Other</option>
+            </select>
+            <span class="err-msg">Please select a relationship.</span>
+          </div>
+          <div class="field">
+            <label>Primary Phone <span class="req">*</span></label>
+            <input type="tel" name="ecPhone" placeholder="e.g. 08012345678" required pattern="[0-9]{11}" autocomplete="tel">
+            <span class="err-msg">Enter a valid 11-digit number.</span>
+          </div>
+          <div class="field">
+            <label>Alternate Phone</label>
+            <input type="tel" name="ecPhoneAlt" placeholder="e.g. 07098765432" pattern="[0-9]{11}" autocomplete="tel">
+            <span class="err-msg">Enter a valid 11-digit number if provided.</span>
+          </div>
+          <div class="field span-2">
+            <label>Email Address</label>
+            <input type="email" name="ecEmail" placeholder="e.g. contact@email.com" autocomplete="email">
+            <span class="err-msg">Enter a valid email address.</span>
+          </div>
+          <div class="field span-2">
+            <label>Contact Address <span class="req">*</span></label>
+            <textarea name="ecAddress" placeholder="Full residential address of the emergency contact..." required minlength="10"></textarea>
+            <span class="err-msg">Please enter a full address.</span>
+          </div>
+        </div>
+
+        <p class="section-divider">Secondary Emergency Contact (Optional)</p>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Name</label>
+            <input type="text" name="ec2Name" placeholder="Second contact's name">
+          </div>
+          <div class="field">
+            <label>Relationship</label>
+            <select name="ec2Relationship">
+              <option value="" disabled selected>Select relationship</option>
+              <option>Father</option><option>Mother</option><option>Guardian</option>
+              <option>Sibling</option><option>Uncle</option><option>Aunt</option>
+              <option>Grandparent</option><option>Spouse</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input type="tel" name="ec2Phone" placeholder="e.g. 08012345678" pattern="[0-9]{11}">
+            <span class="err-msg">Enter a valid 11-digit number if provided.</span>
+          </div>
+          <div class="field">
+            <label>Preferred Contact Time</label>
+            <select name="ec2Time">
+              <option value="" disabled selected>Any time</option>
+              <option>Morning (6am – 12pm)</option>
+              <option>Afternoon (12pm – 5pm)</option>
+              <option>Evening (5pm – 9pm)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="switchTab('guidance')">← Back</button>
+          <button type="button" class="btn btn-primary-emergency" onclick="submitAll()">Submit Registration ✓</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Banner -->
+  <div class="success-banner" id="success-banner">
+    <div class="success-icon">🎉</div>
+    <h2>Registration Complete!</h2>
+    <p>All four sections have been submitted successfully.<br>You will receive a confirmation via email shortly.</p>
+    <br>
+    <button class="btn btn-primary-personal" style="margin-top:0.5rem;" onclick="resetAll()">Start New Registration</button>
+  </div>
+
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toast-icon">✓</span>
+  <span id="toast-msg">Saved successfully</span>
+</div>
+
+<script>
+  const tabs    = ['personal','medical','guidance','emergency'];
+  const saved   = {};
+  let activeTab = 'personal';
+
+  function switchTab(tab) {
+    tabs.forEach(t => {
+      document.getElementById('section-' + t).classList.remove('active');
+      document.querySelector(`.nav-btn[data-form="${t}"]`).classList.remove('active');
+    });
+    document.getElementById('section-' + tab).classList.add('active');
+    document.querySelector(`.nav-btn[data-form="${tab}"]`).classList.add('active');
+    activeTab = tab;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function validate(formId) {
+    const form = document.getElementById(formId);
+    form.classList.add('was-validated');
+    return form.checkValidity();
+  }
+
+  function saveAndNext(current, next) {
+    const formId = 'form-' + current;
+    if (!validate(formId)) {
+      showToast('⚠️', 'Please fill in all required fields correctly.');
+      return;
+    }
+    saved[current] = true;
+    updateProgress();
+    showToast('✓', 'Section saved!');
+    setTimeout(() => switchTab(next), 600);
+  }
+
+  function submitAll() {
+    if (!validate('form-emergency')) {
+      showToast('⚠️', 'Please complete all required fields.');
+      return;
+    }
+    saved['emergency'] = true;
+    updateProgress();
+
+    tabs.forEach(t => {
+      document.getElementById('section-' + t).classList.remove('active');
+      document.querySelector(`.nav-btn[data-form="${t}"]`).classList.remove('active');
+    });
+
+    document.getElementById('success-banner').classList.add('show');
+    showToast('🎉', 'Registration submitted!');
+  }
+
+  function updateProgress() {
+    tabs.forEach(t => {
+      const el = document.getElementById('prog-' + t);
+      if (saved[t]) el.className = 'done-' + t;
+      else el.className = '';
+    });
+  }
+
+  function resetAll() {
+    tabs.forEach(t => {
+      saved[t] = false;
+      const form = document.getElementById('form-' + t);
+      form.reset();
+      form.classList.remove('was-validated');
+    });
+    updateProgress();
+    document.getElementById('success-banner').classList.remove('show');
+    switchTab('personal');
+  }
+
+  function showToast(icon, msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-icon').textContent = icon;
+    document.getElementById('toast-msg').textContent  = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gizi | Expert Buying Agent</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0d0d0f;
+      color: #ffffff;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      border-bottom: 1px solid #1e1e2e;
+    }
+
+    .navbar .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar .logo span {
+      color: #7c4dff;
+    }
+
+    .navbar .nav-btn {
+      background-color: #7c4dff;
+      color: #ffffff;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .navbar .nav-btn:hover {
+      background-color: #6a3de8;
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      text-align: center;
+      padding: 100px 20px 60px;
+    }
+
+    /* Small badge above the heading */
+    .hero .badge {
+      display: inline-block;
+      background-color: #1a1a2e;
+      border: 1px solid #2e2e4e;
+      color: #a78bfa;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.15;
+      color: #ffffff;
+      max-width: 750px;
+      margin: 0 auto 20px;
+      letter-spacing: -1.5px;
+    }
+
+    /* Purple highlight on certain words */
+    .hero h1 .highlight {
+      color: #7c4dff;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: #9ca3af;
+      max-width: 500px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    /* ===== WAITLIST FORM ===== */
+    .waitlist-form {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .waitlist-form input {
+      padding: 14px 20px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: 1px solid #2e2e4e;
+      background-color: #13131f;
+      color: #ffffff;
+      width: 280px;
+      outline: none;
+    }
+
+    .waitlist-form input::placeholder {
+      color: #6b7280;
+    }
+
+    .waitlist-form input:focus {
+      border-color: #7c4dff;
+    }
+
+    .waitlist-form button {
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      background-color: #7c4dff;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .waitlist-form button:hover {
+      background-color: #6a3de8;
+    }
+
+    .hero .note {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    /* ===== FEATURES SECTION ===== */
+    .features {
+      padding: 80px 60px;
+      text-align: center;
+    }
+
+    .features h2 {
+      font-size: 34px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.8px;
+    }
+
+    .features .sub {
+      color: #9ca3af;
+      font-size: 16px;
+      margin-bottom: 50px;
+    }
+
+    /* Three-column card grid */
+    .card-grid {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background-color: #13131f;
+      border: 1px solid #1e1e2e;
+      border-radius: 12px;
+      padding: 32px 28px;
+      width: 280px;
+      text-align: left;
+    }
+
+    .card .icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .how-it-works {
+      padding: 80px 60px;
+      text-align: center;
+      background-color: #0a0a12;
+    }
+
+    .how-it-works h2 {
+      font-size: 34px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.8px;
+    }
+
+    .how-it-works .sub {
+      color: #9ca3af;
+      font-size: 16px;
+      margin-bottom: 50px;
+    }
+
+    /* Steps list */
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      width: 220px;
+      text-align: center;
+    }
+
+    .step .step-num {
+      background-color: #7c4dff;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      width: 44px;
+      height: 44px;
+      line-height: 44px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+    }
+
+    .step h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+
+    /* ===== CTA BOTTOM SECTION ===== */
+    .cta-section {
+      padding: 90px 20px;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      color: #9ca3af;
+      font-size: 16px;
+      margin-bottom: 36px;
+    }
+
+    .cta-section button {
+      padding: 16px 36px;
+      font-size: 16px;
+      font-weight: 700;
+      background-color: #7c4dff;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .cta-section button:hover {
+      background-color: #6a3de8;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      border-top: 1px solid #1e1e2e;
+      padding: 30px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer .logo {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .footer .logo span {
+      color: #7c4dff;
+    }
+
+    .footer p {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .footer .links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer .links a {
+      font-size: 13px;
+      color: #6b7280;
+      text-decoration: none;
+    }
+
+    .footer .links a:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <a href="#" class="logo">GI<span>ZI</span></a>
+    <a href="#waitlist" class="nav-btn">Join Waitlist</a>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+
+    <!-- Small announcement badge -->
+    <div class="badge"> AI-Powered Shopping Agent</div>
+
+    <h1>
+      Find the <span class="highlight">perfect device</span><br />
+      built just for you
+    </h1>
+
+    <p>
+      Gizi is your expert buying agent. Tell us what you need,
+      and we'll match you with the ideal device — no guessing,
+      no endless tabs.
+    </p>
+
+    <!-- Waitlist Email Form -->
+    <div class="waitlist-form" id="waitlist">
+      <input type="email" placeholder="Enter your email address" />
+      <button type="button">Join the Waitlist</button>
+    </div>
+
+    <p class="note"> No spam. We'll only email you when Gizi is ready.</p>
+
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="features">
+    <h2>Why choose Gizi?</h2>
+    <p class="sub">We do the hard work so you don't have to.</p>
+
+    <div class="card-grid">
+
+      <!-- Card 1 -->
+      <div class="card">
+        <div class="icon"></div>
+        <h3>Personalized Matches</h3>
+        <p>
+          Answer a few simple questions and Gizi recommends
+          devices tailored to your exact lifestyle and budget.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <div class="icon"></div>
+        <h3>AI-Powered Advice</h3>
+        <p>
+          Our agent learns your preferences and gives you
+          expert-level guidance in seconds, not hours.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card">
+        <div class="icon"></div>
+        <h3>Best Value Always</h3>
+        <p>
+          We compare hundreds of options across stores to
+          make sure you get the most for your money.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="how-it-works">
+    <h2>How it works</h2>
+    <p class="sub">Three simple steps to your perfect device.</p>
+
+    <div class="steps">
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Tell us your needs</h4>
+        <p>Answer a few quick questions about how you plan to use your device.</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Gizi finds matches</h4>
+        <p>Our AI agent searches and ranks the best options just for you.</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>Buy with confidence</h4>
+        <p>Get a clear recommendation with reasons why it fits your needs.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== BOTTOM CTA ===== -->
+  <section class="cta-section">
+    <h2>Ready to find your<br />perfect device?</h2>
+    <p>Join thousands waiting to shop smarter with Gizi.</p>
+    <button type="button">Get Early Access</button>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <a href="#" class="logo">GI<span>ZI</span></a>
+    <p>© 2025 Gizi. All rights reserved.</p>
+    <div class="links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+</body>
+</html>

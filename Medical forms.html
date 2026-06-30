@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Forms Assignment</title>
+
+  <!-- Internal CSS Styles -->
+  <style>
+
+    /* ===== GENERAL RESET & BODY ===== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Georgia, serif;
+      background-color: #f2f2f2;
+      color: #333333;
+    }
+
+    /* ===== NAVIGATION BAR ===== */
+    nav {
+      background-color: #4CAF50;
+      overflow: hidden;
+    }
+
+    nav a {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      padding: 14px 18px;
+      font-size: 15px;
+    }
+
+    /* Active link gets a darker background */
+    nav a.active {
+      background-color: #2d7a30;
+    }
+
+    nav a:hover {
+      background-color: #45a049;
+    }
+
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px 30px;
+      font-size: 22px;
+      font-weight: bold;
+      border-top: 2px solid #2d7a30;
+    }
+
+    /* ===== MAIN CONTENT AREA ===== */
+    .content {
+      padding: 30px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* ===== FORM SECTION (each form is a "page") ===== */
+    .form-section {
+      display: none; /* Hidden by default */
+      background-color: white;
+      border: 1px solid #cccccc;
+      padding: 30px;
+      margin-top: 20px;
+    }
+
+    /* Show the active form */
+    .form-section.active {
+      display: block;
+    }
+
+    /* ===== FORM HEADING ===== */
+    .form-section h2 {
+      font-size: 20px;
+      margin-bottom: 6px;
+      color: #4CAF50;
+    }
+
+    .form-section p.description {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eeeeee;
+      padding-bottom: 12px;
+    }
+
+    /* ===== FORM LABELS ===== */
+    label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 4px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    /* ===== INPUT FIELDS ===== */
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #cccccc;
+      background-color: #fafafa;
+      font-size: 14px;
+      font-family: Georgia, serif;
+      color: #333;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #4CAF50;
+      background-color: #ffffff;
+    }
+
+    /* ===== RADIO BUTTONS ===== */
+    .radio-group {
+      margin-top: 6px;
+    }
+
+    .radio-group label {
+      display: inline;
+      font-weight: normal;
+      margin-left: 5px;
+      margin-right: 15px;
+    }
+
+    /* ===== TEXTAREA ===== */
+    textarea {
+      height: 90px;
+      resize: vertical;
+    }
+
+    /* ===== SUBMIT BUTTON ===== */
+    input[type="submit"] {
+      margin-top: 22px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 11px 28px;
+      font-size: 15px;
+      cursor: pointer;
+      font-family: Georgia, serif;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    /* ===== REQUIRED STAR ===== */
+    .required-note {
+      font-size: 12px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    span.star {
+      color: red;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #999;
+      margin-top: 40px;
+      border-top: 1px solid #ddd;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== NAVIGATION BAR ===== -->
+  <!-- Each link calls showForm() to switch between forms -->
+  <nav>
+    <a href="#" class="active" id="nav-personal" onclick="showForm('personal', this)">Personal Details</a>
+    <a href="#" id="nav-medical" onclick="showForm('medical', this)">Medical Form</a>
+    <a href="#" id="nav-guidance" onclick="showForm('guidance', this)">Guidance / Counselling</a>
+    <a href="#" id="nav-contact" onclick="showForm('contact', this)">Contact / Feedback</a>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <div class="page-header" id="page-title">
+    Personal Details Form
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="content">
+
+    <!-- =============================== -->
+    <!--   FORM 1: PERSONAL DETAILS      -->
+    <!-- =============================== -->
+    <div class="form-section active" id="form-personal">
+
+      <h2>Personal Details Form</h2>
+      <p class="description">Please fill in your personal information below. Fields marked <span class="star">*</span> are required.</p>
+
+      <form action="#" method="post">
+
+        <!-- Full Name -->
+        <label for="fullname">Full Name <span class="star">*</span></label>
+        <input
+          type="text"
+          id="fullname"
+          name="fullname"
+          placeholder="e.g. John Doe"
+          required
+          minlength="3"
+          maxlength="60"
+        />
+
+        <!-- Email Address -->
+        <label for="email">Email Address <span class="star">*</span></label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="e.g. john@example.com"
+          required
+          maxlength="100"
+        />
+
+        <!-- Age -->
+        <label for="age">Age <span class="star">*</span></label>
+        <input
+          type="number"
+          id="age"
+          name="age"
+          placeholder="e.g. 17"
+          required
+          min="5"
+          max="120"
+        />
+
+        <!-- Date of Birth -->
+        <label for="dob">Date of Birth <span class="star">*</span></label>
+        <input
+          type="date"
+          id="dob"
+          name="dob"
+          required
+        />
+
+        <!-- Gender (Radio Buttons) -->
+        <label>Gender <span class="star">*</span></label>
+        <div class="radio-group">
+          <input type="radio" name="gender" id="male" value="male" required />
+          <label for="male">Male</label>
+
+          <input type="radio" name="gender" id="female" value="female" />
+          <label for="female">Female</label>
+
+          <input type="radio" name="gender" id="other" value="other" />
+          <label for="other">Other</label>
+        </div>
+
+        <!-- Home Address -->
+        <label for="address">Home Address</label>
+        <input
+          type="text"
+          id="address"
+          name="address"
+          placeholder="e.g. 12 Main Street, Lagos"
+          maxlength="120"
+        />
+
+        <!-- Submit Button -->
+        <input type="submit" value="Submit Form" />
+
+        <p class="required-note">
+          <span class="star">*</span> Required fields
+        </p>
+
+      </form>
+    </div><!-- end form-personal -->
+
+
+    <!-- =============================== -->
+    <!--   FORM 2: MEDICAL FORM          -->
+    <!-- =============================== -->
+    <div class="form-section" id="form-medical">
+
+      <h2>Medical Form</h2>
+      <p class="description">Please provide basic health information. Fields marked <span class="star">*</span> are required.</p>
+
+      <form action="#" method="post">
+
+        <!-- Full Name -->
+        <label for="med-name">Full Name <span class="star">*</span></label>
+        <input
+          type="text"
+          id="med-name"
+          name="med-name"
+          placeholder="e.g. Jane Smith"
+          required
+          minlength="3"
+          maxlength="60"
+        />
+
+        <!-- Blood Group -->
+        <label for="blood-group">Blood Group <span class="star">*</span></label>
+        <select id="blood-group" name="blood-group" required>
+          <option value="">-- Select Blood Group --</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="unknown">I don't know</option>
+        </select>
+
+        <!-- Allergies -->
+        <label for="allergies">Do you have any allergies?</label>
+        <input
+          type="text"
+          id="allergies"
+          name="allergies"
+          placeholder="e.g. Peanuts, Dust, Pollen (or write None)"
+          maxlength="200"
+        />
+
+        <!-- Medical Condition -->
+        <label for="condition">Any existing medical condition?</label>
+        <textarea
+          id="condition"
+          name="condition"
+          placeholder="e.g. Asthma, Diabetes (or write None)"
+          maxlength="300"
+        ></textarea>
+
+        <!-- Currently on Medication? -->
+        <label>Are you currently taking any medication?</label>
+        <div class="radio-group">
+          <input type="radio" name="medication" id="med-yes" value="yes" required />
+          <label for="med-yes">Yes</label>
+
+          <input type="radio" name="medication" id="med-no" value="no" />
+          <label for="med-no">No</label>
+        </div>
+
+        <!-- Emergency Contact -->
+        <label for="emergency">Emergency Contact Name <span class="star">*</span></label>
+        <input
+          type="text"
+          id="emergency"
+          name="emergency"
+          placeholder="e.g. Mary Doe (Parent)"
+          required
+          minlength="3"
+          maxlength="60"
+        />
+
+        <!-- Submit Button -->
+        <input type="submit" value="Submit Form" />
+
+        <p class="required-note">
+          <span class="star">*</span> Required fields
+        </p>
+
+      </form>
+    </div><!-- end form-medical -->
+
+
+    <!-- =============================== -->
+    <!--   FORM 3: GUIDANCE / COUNSELLING -->
+    <!-- =============================== -->
+    <div class="form-section" id="form-guidance">
+
+      <h2>Guidance / Counselling Form</h2>
+      <p class="description">This form helps your counsellor understand your academic goals and challenges. Fields marked <span class="star">*</span> are required.</p>
+
+      <form action="#" method="post">
+
+        <!-- Student Name -->
+        <label for="guide-name">Your Name <span class="star">*</span></label>
+        <input
+          type="text"
+          id="guide-name"
+          name="guide-name"
+          placeholder="e.g. Alex Johnson"
+          required
+          minlength="3"
+          maxlength="60"
+        />
+
+        <!-- Class / Grade -->
+        <label for="grade">Class / Grade</label>
+        <input
+          type="text"
+          id="grade"
+          name="grade"
+          placeholder="e.g. Grade 10, JSS 3"
+          maxlength="20"
+        />
+
+        <!-- Favourite Subject -->
+        <label for="fav-subject">Favourite Subject <span class="star">*</span></label>
+        <input
+          type="text"
+          id="fav-subject"
+          name="fav-subject"
+          placeholder="e.g. Mathematics, English"
+          required
+          minlength="2"
+          maxlength="50"
+        />
+
+        <!-- Career Interest -->
+        <label for="career">What do you want to be in the future? <span class="star">*</span></label>
+        <input
+          type="text"
+          id="career"
+          name="career"
+          placeholder="e.g. Doctor, Engineer, Teacher"
+          required
+          minlength="3"
+          maxlength="80"
+        />
+
+        <!-- Challenges in School -->
+        <label for="challenges">What challenges do you face in school?</label>
+        <textarea
+          id="challenges"
+          name="challenges"
+          placeholder="e.g. I find it hard to concentrate during Math class..."
+          maxlength="400"
+        ></textarea>
+
+        <!-- Need for Counselling -->
+        <label>Would you like to speak with a counsellor?</label>
+        <div class="radio-group">
+          <input type="radio" name="counsellor" id="c-yes" value="yes" required />
+          <label for="c-yes">Yes</label>
+
+          <input type="radio" name="counsellor" id="c-no" value="no" />
+          <label for="c-no">No</label>
+
+          <input type="radio" name="counsellor" id="c-maybe" value="maybe" />
+          <label for="c-maybe">Maybe</label>
+        </div>
+
+        <!-- Submit Button -->
+        <input type="submit" value="Submit Form" />
+
+        <p class="required-note">
+          <span class="star">*</span> Required fields
+        </p>
+
+      </form>
+    </div><!-- end form-guidance -->
+
+
+    <!-- =============================== -->
+    <!--   FORM 4: CONTACT / FEEDBACK    -->
+    <!-- =============================== -->
+    <div class="form-section" id="form-contact">
+
+      <h2>Contact / Feedback Form</h2>
+      <p class="description">Use this form to send us a message or share your feedback. Fields marked <span class="star">*</span> are required.</p>
+
+      <form action="#" method="post">
+
+        <!-- Full Name -->
+        <label for="con-name">Your Name <span class="star">*</span></label>
+        <input
+          type="text"
+          id="con-name"
+          name="con-name"
+          placeholder="e.g. Sarah Williams"
+          required
+          minlength="3"
+          maxlength="60"
+        />
+
+        <!-- Email -->
+        <label for="con-email">Email Address <span class="star">*</span></label>
+        <input
+          type="email"
+          id="con-email"
+          name="con-email"
+          placeholder="e.g. sarah@email.com"
+          required
+          maxlength="100"
+        />
+
+        <!-- Phone Number -->
+        <label for="phone">Phone Number</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder="e.g. 08012345678"
+          minlength="7"
+          maxlength="15"
+        />
+
+        <!-- Subject -->
+        <label for="subject">Subject <span class="star">*</span></label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          placeholder="e.g. Question about timetable"
+          required
+          minlength="3"
+          maxlength="100"
+        />
+
+        <!-- Message -->
+        <label for="message">Your Message <span class="star">*</span></label>
+        <textarea
+          id="message"
+          name="message"
+          placeholder="Type your message here..."
+          required
+          minlength="10"
+          maxlength="500"
+        ></textarea>
+
+        <!-- Suggestions -->
+        <label for="suggestions">Do you have any suggestions for us?</label>
+        <textarea
+          id="suggestions"
+          name="suggestions"
+          placeholder="e.g. I think the school library should open on weekends..."
+          maxlength="400"
+        ></textarea>
+
+        <!-- Rating -->
+        <label for="rating">How would you rate our school? <span class="star">*</span></label>
+        <select id="rating" name="rating" required>
+          <option value="">-- Select a Rating --</option>
+          <option value="5">5 - Excellent</option>
+          <option value="4">4 - Good</option>
+          <option value="3">3 - Average</option>
+          <option value="2">2 - Poor</option>
+          <option value="1">1 - Very Poor</option>
+        </select>
+
+        <!-- Submit Button -->
+        <input type="submit" value="Send Message" />
+
+        <p class="required-note">
+          <span class="star">*</span> Required fields
+        </p>
+
+      </form>
+    </div><!-- end form-contact -->
+
+  </div><!-- end .content -->
+
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>Student Forms Assignment &mdash; HTML &amp; CSS Beginner Project</p>
+  </footer>
+
+
+  <!-- ===== JAVASCRIPT (very simple — just shows/hides forms) ===== -->
+  <script>
+
+    // This function shows the selected form and hides the others
+    function showForm(formName, clickedLink) {
+
+      // Hide all form sections
+      var allForms = document.querySelectorAll('.form-section');
+      for (var i = 0; i < allForms.length; i++) {
+        allForms[i].classList.remove('active');
+      }
+
+      // Remove 'active' class from all nav links
+      var allLinks = document.querySelectorAll('nav a');
+      for (var j = 0; j < allLinks.length; j++) {
+        allLinks[j].classList.remove('active');
+      }
+
+      // Show the chosen form
+      document.getElementById('form-' + formName).classList.add('active');
+
+      // Set the clicked nav link as active
+      clickedLink.classList.add('active');
+
+      // Update the page header title
+      var titles = {
+        'personal': 'Personal Details Form',
+        'medical':  'Medical Form',
+        'guidance': 'Guidance / Counselling Form',
+        'contact':  'Contact / Feedback Form'
+      };
+      document.getElementById('page-title').textContent = titles[formName];
+
+      // Prevent the link from jumping to the top (#)
+      return false;
+    }
+
+  </script>
+
+</body>
+</html>

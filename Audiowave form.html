@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audio Waveform </title>
+
+  <!-- ===== CSS STYLES ===== -->
+  <style>
+
+    /* Basic page style */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 30px;
+      color: #333;
+    }
+
+    /* Page heading */
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    /* Small subtitle text */
+    p.subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    /* Main card container */
+    .player-card {
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Song title inside the card */
+    .song-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 4px;
+    }
+
+    /* Artist name */
+    .artist-name {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 20px;
+    }
+
+    /* Waveform display area */
+    .waveform {
+      display: flex;               /* Place bars side by side */
+      align-items: center;         /* Center bars vertically */
+      justify-content: center;
+      gap: 3px;                    /* Space between bars */
+      height: 80px;
+      background-color: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    /* Each individual waveform bar */
+    .bar {
+      width: 5px;
+      background-color: #3498db;   /* Blue color for bars */
+      border-radius: 3px;
+      animation: wave 1.2s ease-in-out infinite alternate;
+    }
+
+    /* Played bars turn green */
+    .bar.played {
+      background-color: #2ecc71;
+    }
+
+    /* Wave animation — bars grow and shrink */
+    @keyframes wave {
+      0%   { transform: scaleY(0.3); }
+      100% { transform: scaleY(1.0); }
+    }
+
+    /* Each bar gets a slightly different animation delay */
+    /* This makes the wave look natural */
+    .bar:nth-child(1)  { height: 30px; animation-delay: 0.0s; }
+    .bar:nth-child(2)  { height: 50px; animation-delay: 0.1s; }
+    .bar:nth-child(3)  { height: 65px; animation-delay: 0.2s; }
+    .bar:nth-child(4)  { height: 45px; animation-delay: 0.05s; }
+    .bar:nth-child(5)  { height: 70px; animation-delay: 0.15s; }
+    .bar:nth-child(6)  { height: 40px; animation-delay: 0.25s; }
+    .bar:nth-child(7)  { height: 55px; animation-delay: 0.3s; }
+    .bar:nth-child(8)  { height: 35px; animation-delay: 0.1s; }
+    .bar:nth-child(9)  { height: 60px; animation-delay: 0.2s; }
+    .bar:nth-child(10) { height: 50px; animation-delay: 0.0s; }
+    .bar:nth-child(11) { height: 70px; animation-delay: 0.12s; }
+    .bar:nth-child(12) { height: 45px; animation-delay: 0.22s; }
+    .bar:nth-child(13) { height: 30px; animation-delay: 0.08s; }
+    .bar:nth-child(14) { height: 65px; animation-delay: 0.18s; }
+    .bar:nth-child(15) { height: 55px; animation-delay: 0.28s; }
+    .bar:nth-child(16) { height: 40px; animation-delay: 0.14s; }
+    .bar:nth-child(17) { height: 60px; animation-delay: 0.04s; }
+    .bar:nth-child(18) { height: 50px; animation-delay: 0.24s; }
+    .bar:nth-child(19) { height: 35px; animation-delay: 0.16s; }
+    .bar:nth-child(20) { height: 70px; animation-delay: 0.06s; }
+    .bar:nth-child(21) { height: 55px; animation-delay: 0.11s; }
+    .bar:nth-child(22) { height: 40px; animation-delay: 0.21s; }
+    .bar:nth-child(23) { height: 65px; animation-delay: 0.31s; }
+    .bar:nth-child(24) { height: 45px; animation-delay: 0.07s; }
+    .bar:nth-child(25) { height: 50px; animation-delay: 0.17s; }
+    .bar:nth-child(26) { height: 60px; animation-delay: 0.27s; }
+    .bar:nth-child(27) { height: 35px; animation-delay: 0.03s; }
+    .bar:nth-child(28) { height: 70px; animation-delay: 0.13s; }
+    .bar:nth-child(29) { height: 55px; animation-delay: 0.23s; }
+    .bar:nth-child(30) { height: 40px; animation-delay: 0.09s; }
+
+    /* Paused state — stop the animation */
+    .waveform.paused .bar {
+      animation-play-state: paused;
+    }
+
+    /* Progress bar row */
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* Time labels */
+    .time-label {
+      font-size: 12px;
+      color: #999;
+      min-width: 35px;
+    }
+
+    /* Progress bar background */
+    .progress-bar {
+      flex: 1;
+      height: 5px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    /* The filled part of the progress bar */
+    .progress-fill {
+      height: 100%;
+      width: 35%;                /* Simulated playback position */
+      background-color: #3498db;
+      border-radius: 5px;
+      transition: width 0.3s;
+    }
+
+    /* Control buttons row */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    /* All control buttons */
+    .btn {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* Play / Pause button */
+    .btn-play {
+      background-color: #3498db;
+      color: white;
+      font-size: 16px;
+      padding: 10px 24px;
+    }
+
+    .btn-play:hover {
+      background-color: #2980b9;
+    }
+
+    /* Skip buttons */
+    .btn-skip {
+      background-color: #ecf0f1;
+      color: #555;
+    }
+
+    .btn-skip:hover {
+      background-color: #dce1e7;
+    }
+
+    /* Volume area */
+    .volume-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    /* Volume label */
+    .volume-row span {
+      font-size: 13px;
+      color: #777;
+    }
+
+    /* Volume slider */
+    input[type="range"] {
+      width: 120px;
+      accent-color: #3498db;  /* Blue slider thumb */
+    }
+
+    /* Info section below the card */
+    .info-box {
+      max-width: 600px;
+      margin: 25px auto 0 auto;
+      background-color: #eaf4fb;
+      border-left: 4px solid #3498db;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .info-box strong {
+      color: #2c3e50;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Page Title -->
+  <h1>Audio Waveform </h1>
+  <p class="subtitle">An Assignment by Mr CJ</p>
+
+  <!-- Player Card -->
+  <div class="player-card">
+
+    <!-- Song Info -->
+    <div class="song-title">Wa</div>
+    <div class="artist-name">by Asake</div>
+
+    <!-- Waveform Bars -->
+    <!-- Each div.bar is one bar in the waveform -->
+    <div class="waveform" id="waveform">
+      <div class="bar played"></div>
+      <div class="bar played"></div>
+      <div class="bar played"></div>
+      <div class="bar played"></div>
+      <div class="bar played"></div>
+      <div class="bar played"></div>
+      <div class="bar played"></div>
+      <div class="bar played"></div>
+      <div class="bar played"></div>
+      <div class="bar played"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-row">
+      <span class="time-label" id="currentTime">1:08</span>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span class="time-label" style="text-align:right;">3:14</span>
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="controls">
+      <button class="btn btn-skip" onclick="skipBack()"> Prev</button>
+      <button class="btn btn-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+      <button class="btn btn-skip" onclick="skipForward()">Next </button>
+    </div>
+
+    <!-- Volume Control -->
+    <div class="volume-row">
+      <span> Volume:</span>
+      <input type="range" min="0" max="100" value="70" id="volumeSlider" />
+      <span id="volumeValue">70%</span>
+    </div>
+
+  </div>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+
+    // Track whether audio is playing
+    var isPlaying = true;
+
+    // Toggle between play and pause
+    function togglePlay() {
+      var waveform = document.getElementById("waveform");
+      var playBtn  = document.getElementById("playBtn");
+
+      if (isPlaying) {
+        // Pause: stop the animation
+        waveform.classList.add("paused");
+        playBtn.textContent = " Play";
+        isPlaying = false;
+      } else {
+        // Play: resume the animation
+        waveform.classList.remove("paused");
+        playBtn.textContent = " Pause";
+        isPlaying = true;
+      }
+    }
+
+    // Skip Back button — resets progress to start
+    function skipBack() {
+      document.getElementById("progressFill").style.width = "0%";
+      document.getElementById("currentTime").textContent = "0:00";
+    }
+
+    // Skip Forward button — jumps progress to end
+    function skipForward() {
+      document.getElementById("progressFill").style.width = "100%";
+      document.getElementById("currentTime").textContent = "3:14";
+    }
+
+    // Show volume percentage when slider is moved
+    document.getElementById("volumeSlider").addEventListener("input", function() {
+      document.getElementById("volumeValue").textContent = this.value + "%";
+    });
+
+  </script>
+
+</body>
+</html>

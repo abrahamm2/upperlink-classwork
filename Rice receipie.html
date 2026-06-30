@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Page title shown in browser tab -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jollof Rice Recipe</title>
+
+  <!-- ========== CSS STYLING ========== -->
+  <style>
+    /* General page styles */
+    body {
+      font-family: Georgia, serif;
+      background-color: #f9f5f0;
+      color: #333333f3;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Top header banner */
+    header {
+      background-color: #37c02b;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    header h1 {
+      font-size: 36px;
+      margin: 0 0 8px 0;
+    }
+
+    header p {
+      font-size: 16px;
+      margin: 0;
+      font-style: italic;
+    }
+
+    /* Main content container */
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    /* Each section card */
+    .section {
+      background-color: #ffffff;
+      border: 1px solid #dddddd;
+      border-radius: 6px;
+      padding: 24px 28px;
+      margin-bottom: 0;
+      flex: 1 1 340px;
+    }
+
+    /* Section headings */
+    .section h2 {
+      font-size: 22px;
+      color: #c0392b;
+      border-bottom: 2px solid #f0c0bb;
+      padding-bottom: 8px;
+      margin-top: 0;
+      }
+
+    /* Food image */
+    .recipe-image {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+      }
+
+    /* Image caption */
+    .image-caption {
+      text-align: center;
+      font-size: 13px;
+      color: #888888;
+      margin-top: 8px;
+    }
+
+    /* Ingredients list */
+    ul.ingredients {
+      list-style-type: disc;
+      padding-left: 20px;
+      line-height: 1.9;
+    }
+
+    ul.ingredients li {
+      font-size: 15px;
+    }
+
+    /* Cooking steps */
+    ol.steps {
+      padding-left: 20px;
+      line-height: 1.9;
+    }
+
+    ol.steps li {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    /* YouTube video embed wrapper */
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 ratio */
+      height: 0;
+      overflow: hidden;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 4px;
+    }
+
+    /* Footer at the bottom */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #aaaaaa;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 10px;
+    }
+
+    /* Small tip box */
+    .tip-box {
+      background-color: #fff8e1;
+      border-left: 4px solid #12f368;
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header>
+    <h1> Nigerian Jollof Rice</h1>
+    <p>A flavourful one-pot West African classic</p>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <div class="container">
+
+    <!-- RECIPE IMAGE -->
+    <div class="section">
+      <h2> The Dish</h2>
+
+      <!-- Using a public placeholder image of jollof rice -->
+      <img
+        src="c:\Users\user\Pictures\jollof rice.jpg"
+        alt="A pot of Nigerian Jollof Rice"
+        class="recipe-image"
+      />
+      <p class="image-caption">Nigerian Jollof Rice — rich, smoky, and full of flavour</p>
+    </div>
+
+    <!-- INGREDIENTS -->
+    <div class="section">
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        <li>2 cups long-grain parboiled rice</li>
+        <li>400g tomato paste (or blended fresh tomatoes)</li>
+        <li>2 red bell peppers, blended</li>
+        <li>2 scotch bonnet peppers (adjust for spice level)</li>
+        <li>1 large onion, chopped</li>
+        <li>3 tablespoons vegetable oil</li>
+        <li>2 cups chicken stock</li>
+        <li>1 teaspoon curry powder</li>
+        <li>1 teaspoon thyme</li>
+        <li>2 bay leaves</li>
+        <li>Salt to taste</li>
+        <li>1 stock cube (e.g. Knorr)</li>
+      </ul>
+
+      <!-- Helpful tip -->
+      <div class="tip-box">
+         <strong>Tip:</strong> Parboiled rice holds its shape better and gives Jollof Rice
+        its signature firm texture. Avoid using soft or jasmine rice.
+      </div>
+    </div>
+
+    <!-- COOKING INSTRUCTIONS -->
+    <div class="section">
+      <h2> Step-by-Step Instructions</h2>
+      <ol class="steps">
+        <li>Blend the tomatoes, red bell peppers, scotch bonnet, and half the onion together into a smooth paste.</li>
+        <li>Heat oil in a large pot over medium heat. Fry the remaining chopped onion until soft and golden.</li>
+        <li>Pour in the blended tomato mixture. Stir well and cook on medium heat for about <strong>15–20 minutes</strong>, stirring occasionally, until the raw smell is gone and the paste darkens slightly.</li>
+        <li>Add the tomato paste and stir it in. Cook for another <strong>5 minutes</strong>.</li>
+        <li>Season with curry powder, thyme, bay leaves, stock cube, and salt. Stir everything together.</li>
+        <li>Pour in the chicken stock and bring to a gentle boil.</li>
+        <li>Wash the rice thoroughly and add it to the pot. Stir once to combine.</li>
+        <li>Reduce the heat to low, cover the pot tightly, and let the rice cook for <strong>25–30 minutes</strong>.</li>
+        <li>Check halfway through and add a splash of water if the rice looks too dry.</li>
+        <li>Once the rice is cooked and fluffy, remove the bay leaves and serve hot. Enjoy!</li>
+      </ol>
+    </div>
+
+    <!-- YOUTUBE VIDEO -->
+    <div class="section">
+      <h2> Watch How It's Made</h2>
+      <p>Not sure about a step? Watch this short video guide:</p>
+
+      <!-- Embedded YouTube video (16:9 responsive) -->
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/EfZEArZcfAY"
+          title="How to Make Nigerian Jollof Rice"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+  </div>
+  <!-- End of container -->
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <p> My Favourite Recipe Page &mdash; Built with plain HTML &amp; CSS</p>
+  </footer>
+
+</body>
+</html>
